@@ -1,6 +1,6 @@
 # SimplifyArticlePages-JS
 一个油猴脚本，精简常见的文章网站
-```
+```js
 // ==UserScript==
 // @name         精简常见文章网站
 // @namespace    http://tampermonkey.net/
