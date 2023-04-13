@@ -2,8 +2,8 @@
 // @name         精简常见文章网站
 // @namespace    http://tampermonkey.net/
 // @license      GPL-3.0
-// @version      1.6.4
-// @description  精简 CSDN、简书、蒲公英、脚本之家、知乎专栏、百家号、爱码网、ITEYE、bbsmax论坛、术之多、搜狐、微信公众号、阿里云 文章页面　　　　　　　　　　　优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
+// @version      1.6.5
+// @description  精简 CSDN、简书、蒲公英、脚本之家、知乎专栏、百家号、爱码网、ITEYE、bbsmax论坛、术之多、搜狐、微信公众号、阿里云、腾讯云、51cto博客 文章页面　　　　　　　　　　　优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
 // @author       AiniyoMua
 // @home-url     https://greasyfork.org/zh-CN/scripts/459519
 // @homepageURL  https://greasyfork.org/zh-CN/scripts/459519
@@ -29,6 +29,7 @@
 // @match        *://www.shuzhiduo.com/A/*
 // @match        *://developer.aliyun.com/article/*
 // @match        *://cloud.tencent.com/developer/article/*
+// @match        *://blog.51cto.com/*
 // @icon         data:image/png;base64,AAABAAEAICACAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AA////Af/+P4Pf/H/Dn/x/w4f8/8OD+P/Dg/j/w8P4/8Ph+P/D4fD/w/Dh/8Pw4//D8MP/w/gD/8P4B//D+Af/w/gP/8P4H//D+B//w/gP/8P8D+/D/AHfw/wAH8P8AD/D/AYPw/4AAcP/AF3D/wf/w/8H/8P/j//B////gP///w4AAAB8AAAAOAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABwAAAA+AAAAc=
 // @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
@@ -66,6 +67,7 @@
 	}else if(window.location.hostname.includes("shuzhiduo")){				bbsmax();
 	}else if(window.location.hostname.includes("aliyun")){					aliyun();
 	}else if(window.location.hostname.includes("tencent")){					tengxunyun();
+	}else if(window.location.hostname.includes("51cto")){					blog51cto();
 	}
 
 
@@ -510,6 +512,39 @@
 			div.col-2-article-page,body{min-width: 500px !important;}
 		`
 		const topBar = `div.cdc-header{display: none !important;} div.layout-side{top: 20px !important;}`
+		GM_addStyle(removeTopBar ? css1 + topBar : css1);
+	}
+
+	function blog51cto() {
+		const css1 = `
+			/* 去掉顶栏悬浮 */
+			div.ace-developer-common-nav > div:nth-child(1){position: static !important;}
+			/* 去掉顶栏悬浮 */
+			div.Header {position: absolute !important;}
+			/* 去掉左按钮栏悬浮 干脆不要了，文章底部都有 */
+			.action-aside.action-aside-left{position: absolute !important;display: none !important;}
+			/* 右侧栏 近期文章 */
+			aside.detail-content-right > section:nth-child(2){display: none !important;}
+			/* 右侧栏 新人活动 */
+			aside.detail-content-right > section:nth-child(3) > a:nth-child(1) {display: none !important;}
+			/* 右下角悬浮栏 */
+			aside.minmenu {display: none !important;}
+			/* 右侧栏 不与文章一起居中 */
+			aside.detail-content-right {margin-right:-302px !important;}
+			/* 去掉顶栏悬浮 */
+			.Content.detail-content-new > div.fixtitle {display: none !important;}
+			/* 文章主体 更改宽度 */
+			article.detail-content-left{width:980px !important;}
+			/* 文章父布局 更改宽度 */
+			div#page_center{width:1020px !important;}
+			/* 文章主体 更改padd、添加阴影 */
+			.common-section.common-spacing.mb30.article-detail{padding:15px 40px !important;box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;}
+			/* 左侧栏 去掉半屏时展开成横条状 */
+			/* div.inner{width:0px !important;} */
+			/* 左侧栏 离文章近一点 */
+			/* aside.action-aside{left:58% !important;} */
+		`
+		const topBar = `div.Header{display: none !important;} header.home-top{display: none !important;} div.detail-content-new{padding: 20px 0 !important;}`
 		GM_addStyle(removeTopBar ? css1 + topBar : css1);
 	}
 
