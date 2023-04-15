@@ -5,8 +5,8 @@
 // @name         精简常见文章网站
 // @namespace    http://tampermonkey.net/
 // @license      GPL-3.0
-// @version      1.6.5
-// @description  精简 CSDN、简书、蒲公英、脚本之家、知乎专栏、百家号、爱码网、ITEYE、bbsmax论坛、术之多、搜狐、微信公众号、阿里云、腾讯云、51cto博客 文章页面　　　　　　　　　　　优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
+// @version      1.6.6
+// @description  精简 CSDN、简书、蒲公英、脚本之家、知乎专栏、百家号、爱码网、ITEYE、bbsmax论坛、术之多、搜狐、微信公众号、阿里云、腾讯云、51cto博客、网易 文章页面　　　　　　　　　　　优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
 // @author       AiniyoMua
 // @home-url     https://greasyfork.org/zh-CN/scripts/459519
 // @homepageURL  https://greasyfork.org/zh-CN/scripts/459519
@@ -33,6 +33,7 @@
 // @match        *://developer.aliyun.com/article/*
 // @match        *://cloud.tencent.com/developer/article/*
 // @match        *://blog.51cto.com/*
+// @match        *://www.163.com/*/article/*
 // @icon         data:image/png;base64,AAABAAEAICACAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AA////Af/+P4Pf/H/Dn/x/w4f8/8OD+P/Dg/j/w8P4/8Ph+P/D4fD/w/Dh/8Pw4//D8MP/w/gD/8P4B//D+Af/w/gP/8P4H//D+B//w/gP/8P8D+/D/AHfw/wAH8P8AD/D/AYPw/4AAcP/AF3D/wf/w/8H/8P/j//B////gP///w4AAAB8AAAAOAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABwAAAA+AAAAc=
 // @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
@@ -71,6 +72,7 @@
 	}else if(window.location.hostname.includes("aliyun")){					aliyun();
 	}else if(window.location.hostname.includes("tencent")){					tengxunyun();
 	}else if(window.location.hostname.includes("51cto")){					blog51cto();
+	}else if(window.location.hostname.includes("163")){						wangyi163();
 	}
 
 
@@ -551,6 +553,36 @@
 		GM_addStyle(removeTopBar ? css1 + topBar : css1);
 	}
 
+	function wangyi163() {
+		const css1 = `
+			/* 右侧栏 */
+			div.post_side{display: none !important;}
+			/* 文章主体，添加阴影、更改padd */
+			div.post_body{box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;padding:20px 40px !important;}
+			/* 右下二维码 */
+			a.newsapp-qrcode{display: none !important;}
+			/* 回到顶部 */
+			a.ns-side-totop{display: none !important;}
+			/* 文章左侧悬浮按钮，去掉悬浮 */
+			div.post_top_fixed{display: none !important;}
+			/* 文章左侧悬浮按钮，放到右边 */
+			div.post_top{right:0 !important;left:auto !important;margin-right:-150px !important;background:none !important;}
+			/* 文章主体父布局，去掉padd */
+			div#content{padding:0 !important;}
+			/* 文章主体，更改距离顶部的marg */
+			div.post_crumb{margin: 16px 0 26px !important;}
+			/* 文章主体，匹配父布局的宽度 */
+			div.post_main{width:100% !important;}
+			/* 文章主体父布局，更改宽度 */
+			div#container{width:950px !important;}
+			/* 底部文章推荐，更改padd */
+			.post_recommends.js-tab-mod{padding-left:0px !important;}
+		`
+		const topBar = `div#js_N_NTES_wrap{display: none !important;}div.post_crumb{display: none !important;}`
+		GM_addStyle(removeTopBar ? css1 + topBar : css1);
+	}
+
 })();
+
 
 ```
