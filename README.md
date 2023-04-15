@@ -1,5 +1,8 @@
-# SimplifyArticlePages-JS
-一个油猴脚本，精简常见的文章网站
+# 一个油猴脚本：精简常见的文章网站
+#### 优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
+
+SimplifyArticlePages-JS
+
 ```js
 // ==UserScript==
 // @name         精简常见文章网站
