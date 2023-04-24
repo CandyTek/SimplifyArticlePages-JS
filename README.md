@@ -8,7 +8,7 @@ SimplifyArticlePages-JS
 // @name         精简常见文章网站
 // @namespace    http://tampermonkey.net/
 // @license      GPL-3.0
-// @version      1.6.6
+// @version      1.6.7
 // @description  精简 CSDN、简书、蒲公英、脚本之家、知乎专栏、百家号、爱码网、ITEYE、bbsmax论坛、术之多、搜狐、微信公众号、阿里云、腾讯云、51cto博客、网易 文章页面　　　　　　　　　　　优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
 // @author       AiniyoMua
 // @home-url     https://greasyfork.org/zh-CN/scripts/459519
@@ -37,6 +37,7 @@ SimplifyArticlePages-JS
 // @match        *://cloud.tencent.com/developer/article/*
 // @match        *://blog.51cto.com/*
 // @match        *://www.163.com/*/article/*
+// @match        *://juejin.cn/post/*
 // @icon         data:image/png;base64,AAABAAEAICACAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AA////Af/+P4Pf/H/Dn/x/w4f8/8OD+P/Dg/j/w8P4/8Ph+P/D4fD/w/Dh/8Pw4//D8MP/w/gD/8P4B//D+Af/w/gP/8P4H//D+B//w/gP/8P8D+/D/AHfw/wAH8P8AD/D/AYPw/4AAcP/AF3D/wf/w/8H/8P/j//B////gP///w4AAAB8AAAAOAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABwAAAA+AAAAc=
 // @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
@@ -53,7 +54,7 @@ SimplifyArticlePages-JS
 	GM_registerMenuCommand("移除标题栏", function() {
 		var name = prompt("是否移除所有标题栏？（true  false）", removeTopBar);
 		var temp = true;
-		if(name==="不" || name==="否" || name==="0" || name==="false" || name==="no" || name==="not"){
+		if(name==="不" || name==="否" || name==="0" || name==="false" || name==="no" || name==="not" || name==="不移除" || name==="非"){
 			temp = false;
 		}
 		GM_setValue("pref_topbar", temp);
@@ -76,6 +77,7 @@ SimplifyArticlePages-JS
 	}else if(window.location.hostname.includes("tencent")){					tengxunyun();
 	}else if(window.location.hostname.includes("51cto")){					blog51cto();
 	}else if(window.location.hostname.includes("163")){						wangyi163();
+	}else if(window.location.hostname.includes("juejin")){					juejin();
 	}
 
 
@@ -188,9 +190,9 @@ SimplifyArticlePages-JS
 			#container{width: 970px !important;}
 			/* 左边的分享、一键回顶 悬浮栏 */
 			#right-share{display: none !important;}
-			/* 文章主体 顶部的嵌入广告 */
+			/* 文章主体，顶部的嵌入广告 */
 			.lbd.clearfix{display: none !important;}
-			/* 文章主体 底部的嵌入广告 */
+			/* 文章主体，底部的嵌入广告 */
 			.lbd_bot.clearfix{display: none !important;}
 			/* 搜索栏 */
 			.search{display: none !important;}
@@ -267,7 +269,7 @@ SimplifyArticlePages-JS
 			.Post-NormalSub > div{width:880px !important;}
 			/* 更改标题关注按钮的距离 */
 			div.AuthorInfo{max-width: 880px !important;}
-			/* 去掉右边悬浮按钮 点赞分享 */
+			/* 去掉右边悬浮按钮，点赞分享 */
 			.Post-SideActions{display: none !important;}
 			/* 更改顶栏高度 */
 			div.ColumnPageHeader-content{height:30px !important;}
@@ -466,7 +468,7 @@ SimplifyArticlePages-JS
 			.right-item-box.recommend-box{display: none !important;}
 			/* 右侧推广电子书 */
 			.right-item-box.ebook-box{display: none !important;}
-			/* 左侧悬浮按钮栏 不悬浮 */
+			/* 去掉左侧按钮栏悬浮 */
 			div#action-btns{position: absolute !important;}
 			/* 多余的地址导航栏（开发者社区 > 作者 > 正文） */
 			div.developer-nav{display: none !important;}
@@ -494,13 +496,13 @@ SimplifyArticlePages-JS
 			div.com-sticky-header {position: fixed !important;}
 			/* 多余的地址导航栏（开发者社区 > 作者 > 正文） */
 			div.com-inner{display: none !important;}
-			/* 右侧 活动推荐 */
+			/* 右侧，活动推荐 */
 			section.J-activityRecommend{display: none !important;}
-			/* 右侧 关注腾讯公众号 */
+			/* 右侧，关注腾讯公众号 */
 			section.com-side-public{display: none !important;}
-			/* 右下悬浮按钮 扫描二维码 */
+			/* 右下角悬浮按钮，扫描二维码 */
 			div.com-widget-global{display: none !important;}
-			/* 去掉左按钮栏 悬浮 */
+			/* 去掉左按钮栏悬浮 */
 			div.J-sharingBar{position: absolute !important;}
 			/* 标题粗体 */
 			h1.J-articleTitle{font-weight: bold !important;}
@@ -510,7 +512,7 @@ SimplifyArticlePages-JS
 			section.J-articlePanel{box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;padding: 20px 40px !important;}
 			/* 文章父布局，使用默认display */
 			div.layout-main{display: block !important;padding-left: 4px !important;}
-			/* 右侧栏，使它不加入居中计算 */
+			/* 右侧栏，不参与居中对齐 */
 			div.layout-side{
 				margin-left: 930px !important;
 				position: absolute !important;
@@ -529,27 +531,27 @@ SimplifyArticlePages-JS
 			div.ace-developer-common-nav > div:nth-child(1){position: static !important;}
 			/* 去掉顶栏悬浮 */
 			div.Header {position: absolute !important;}
-			/* 去掉左按钮栏悬浮 干脆不要了，文章底部都有 */
+			/* 去掉左按钮栏悬浮，干脆不要了，文章底部都有 */
 			.action-aside.action-aside-left{position: absolute !important;display: none !important;}
-			/* 右侧栏 近期文章 */
+			/* 右侧栏，近期文章 */
 			aside.detail-content-right > section:nth-child(2){display: none !important;}
-			/* 右侧栏 新人活动 */
+			/* 右侧栏，新人活动 */
 			aside.detail-content-right > section:nth-child(3) > a:nth-child(1) {display: none !important;}
 			/* 右下角悬浮栏 */
 			aside.minmenu {display: none !important;}
-			/* 右侧栏 不与文章一起居中 */
+			/* 右侧栏，不参与居中对齐 */
 			aside.detail-content-right {margin-right:-302px !important;}
 			/* 去掉顶栏悬浮 */
 			.Content.detail-content-new > div.fixtitle {display: none !important;}
-			/* 文章主体 更改宽度 */
+			/* 文章主体，更改宽度 */
 			article.detail-content-left{width:980px !important;}
-			/* 文章父布局 更改宽度 */
+			/* 文章父布局，更改宽度 */
 			div#page_center{width:1020px !important;}
-			/* 文章主体 更改padd、添加阴影 */
+			/* 文章主体，更改padd、添加阴影 */
 			.common-section.common-spacing.mb30.article-detail{padding:15px 40px !important;box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;}
-			/* 左侧栏 去掉半屏时展开成横条状 */
+			/* 左侧栏悬浮按钮，去掉半屏时展开成横条状 */
 			/* div.inner{width:0px !important;} */
-			/* 左侧栏 离文章近一点 */
+			/* 左侧栏悬浮按钮，离文章近一点 */
 			/* aside.action-aside{left:58% !important;} */
 		`
 		const topBar = `div.Header{display: none !important;} header.home-top{display: none !important;} div.detail-content-new{padding: 20px 0 !important;}`
@@ -562,13 +564,13 @@ SimplifyArticlePages-JS
 			div.post_side{display: none !important;}
 			/* 文章主体，添加阴影、更改padd */
 			div.post_body{box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;padding:20px 40px !important;}
-			/* 右下二维码 */
+			/* 右下角，二维码 */
 			a.newsapp-qrcode{display: none !important;}
-			/* 回到顶部 */
+			/* 右下角，回到顶部 */
 			a.ns-side-totop{display: none !important;}
 			/* 文章左侧悬浮按钮，去掉悬浮 */
 			div.post_top_fixed{display: none !important;}
-			/* 文章左侧悬浮按钮，放到右边 */
+			/* 左侧悬浮按钮，放到右边 */
 			div.post_top{right:0 !important;left:auto !important;margin-right:-150px !important;background:none !important;}
 			/* 文章主体父布局，去掉padd */
 			div#content{padding:0 !important;}
@@ -585,7 +587,37 @@ SimplifyArticlePages-JS
 		GM_addStyle(removeTopBar ? css1 + topBar : css1);
 	}
 
-})();
+	function juejin() {
+		const css1 = `
+			/* 右侧栏，推广 */
+			div.sidebar > li{display: none !important;}
+			/* 右侧栏，推广 */
+			div.sidebar > a{display: none !important;}
+			/* 去掉顶栏悬浮 */
+			header.main-header{position:absolute !important;}
+			/* 左侧栏，去掉悬浮 */
+			.article-suspended-panel.dynamic-data-ready{position:absolute !important;}
+			/* 文章下面，小册推广 */
+			div.category-course-recommend{display: none !important;}
+			/* 右侧栏悬浮按钮，觉得还不错，一键收藏 */
+			div.guide-collect-popover{display: none !important;}
+			/* 文章主体，匹配父布局宽度 */
+			.main-area.article-area{width:100% !important;}
+			/* 文章父布局，更改宽度，适配半屏窗口 */
+			main.main-container{max-width: 960px !important;margin: 0 auto !important;}
+			/* 右侧栏悬浮按钮，不参与居中对齐 */
+			div.sidebar{margin-right: calc(-25rem - 32px) !important;}
+			/* 文章主体，添加阴影 */
+			article.article{box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;}
+			/* 底部文章推荐，匹配父布局宽度 */
+			.main-area.recommended-area.shadow{width:100% !important;}
+			/* 右下角悬浮按钮 */
+			.suspension-panel.suspension-panel{display: none !important;}
+		`
+		const topBar = `div.main-header-box{display: none !important;}`
+		GM_addStyle(removeTopBar ? css1 + topBar : css1);
+	}
 
+})();
 
 ```
