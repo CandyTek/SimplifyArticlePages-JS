@@ -8,7 +8,7 @@ SimplifyArticlePages-JS
 // @name         精简常见文章网站
 // @namespace    http://tampermonkey.net/
 // @license      GPL-3.0
-// @version      1.6.7
+// @version      1.6.8
 // @description  精简 CSDN、简书、蒲公英、脚本之家、知乎专栏、百家号、爱码网、ITEYE、bbsmax论坛、术之多、搜狐、微信公众号、阿里云、腾讯云、51cto博客、网易 文章页面　　　　　　　　　　　优化阅读体验【文章宽度一致】【统一标题】【使用阴影】【适配半屏窗口】【无感知加载】【可选 去除顶栏】
 // @author       AiniyoMua
 // @home-url     https://greasyfork.org/zh-CN/scripts/459519
@@ -38,6 +38,7 @@ SimplifyArticlePages-JS
 // @match        *://blog.51cto.com/*
 // @match        *://www.163.com/*/article/*
 // @match        *://juejin.cn/post/*
+// @match        *://www.freesion.com/article/*
 // @icon         data:image/png;base64,AAABAAEAICACAAAAAAAwAQAAFgAAACgAAAAgAAAAQAAAAAEAAQAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA////AA////Af/+P4Pf/H/Dn/x/w4f8/8OD+P/Dg/j/w8P4/8Ph+P/D4fD/w/Dh/8Pw4//D8MP/w/gD/8P4B//D+Af/w/gP/8P4H//D+B//w/gP/8P8D+/D/AHfw/wAH8P8AD/D/AYPw/4AAcP/AF3D/wf/w/8H/8P/j//B////gP///w4AAAB8AAAAOAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABwAAAA+AAAAc=
 // @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
@@ -78,6 +79,7 @@ SimplifyArticlePages-JS
 	}else if(window.location.hostname.includes("51cto")){					blog51cto();
 	}else if(window.location.hostname.includes("163")){						wangyi163();
 	}else if(window.location.hostname.includes("juejin")){					juejin();
+	}else if(window.location.hostname.includes("freesion")){				freesion();
 	}
 
 
@@ -163,6 +165,8 @@ SimplifyArticlePages-JS
 			._13lIbp{display:none !important;}
 			/* 文章适配半屏窗口 */
 			div._3VRLsv{margin-left: calc((100vw - 800px) /2) !important;}
+			/* 一些小窗 */
+			body > div:nth-child(13), body > div:nth-child(11), body > div:nth-child(14),body > div:nth-child(12), div#note{display:none !important;}
 		`;
 		const topBar = `header{display:none !important;}`
 		GM_addStyle(removeTopBar ? css1 + topBar : css1);
@@ -432,15 +436,20 @@ SimplifyArticlePages-JS
 			/* 去掉顶栏悬浮 */
 			header#main-header{position: static !important;}
 			/* 主体文章父布局，更改宽度 */
-			div#article-container{width:1120px !important;}
+			div#article-container{width:940px !important;}
 			/* 主体文章，更改宽度，添加阴影，更改padd */
 			.left.main{
-				width: calc(100% - 260px) !important;
+				width:850px !important;
 				box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;
 				padding: 24px 40px !important;
+				margin-left: unset !important;
 			}
 			/* 左侧栏移到右边，适配半屏窗口 */
-			.column.left{position: absolute !important;right: 0px !important;}
+			.column.left{
+				width: 0px !important;
+				position: absolute !important;
+				right: -10px !important;
+			}
 			/* 更改去悬浮后，多出来的东西 */
 			div.location-without-nav{margin-top:0px !important;}
 			/* 左下角广告 */
@@ -615,6 +624,34 @@ SimplifyArticlePages-JS
 			.suspension-panel.suspension-panel{display: none !important;}
 		`
 		const topBar = `div.main-header-box{display: none !important;}`
+		GM_addStyle(removeTopBar ? css1 + topBar : css1);
+	}
+
+	function freesion() {
+		const css1 = `
+			/* 文章父布局，更改宽度，更改padd */
+			div#wrapper{padding: 0px !important;width: 960px !important;}
+			/* 右侧大窗 */
+			section#intro{display: none !important;}
+			/* 推广 */
+			#setupad_750_200_ads{display: none !important;}
+			/* 左侧栏，改到右边，不参与居中对齐 */
+			section#sidebar{
+				float: right !important;
+				position: absolute !important;
+				width: 0px !important;
+				margin-right: -350px !important;
+				top: unset !important;
+			}
+			/* 文章主体，添加阴影，更改padd，更改宽度，更改背景 */
+			div#article_content{
+				box-shadow: 0 16px 45px rgb(0 0 0 / 15%) !important;
+				padding: 24px 40px !important;
+				max-width: 10000px !important;
+				background: #fefefe !important;
+			}
+		`
+		const topBar = `header#header{display: none !important;} body{padding-top: 10px !important;}`
 		GM_addStyle(removeTopBar ? css1 + topBar : css1);
 	}
 
